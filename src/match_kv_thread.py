@@ -124,12 +124,6 @@ class OnlineMatch:
         return longest_result_dict
 
 # 指纹库读入
-def load_result_from_pickle(input_path):
-    """从 Pickle 文件读取k:v数据"""
-    with open(input_path, 'rb') as pickle_file:
-        result_dict = pickle.load(pickle_file)
-    return result_dict
-
 def csv_to_kv(file_path, window_max, C):
     """从 csv 文件读取fp数据"""
     start = time.time()
