@@ -43,11 +43,11 @@ class OnlineMatch:
         end_time = time.time()  
         print(f"chunk_match took {end_time - start_time:.4f} seconds")
 
-    # Tasks for chunk-list to video_fp-list
+    # Tasks1: chunk:match_idx_list -> video_fp:match_idx_list
     def process_raw_result(self, chunk_idx, raw_result):
         start_time = time.time()  
 
-        # 方案2：分组任务->巨慢 方案1：单任务->巨慢
+        # 方案1：单任务->巨慢 方案2：分组任务->巨慢
         print(f'chunk_idx={chunk_idx}需处理{len(raw_result)}个entry...')
         block_size = 100000  # 假设每个子块处理10000条数据
         blocks = [raw_result[i:i + block_size] for i in range(0, len(raw_result), block_size)]
@@ -68,7 +68,7 @@ class OnlineMatch:
         end_time = time.time()  
         print(f"process_raw_result took {end_time - start_time:.4f} seconds")
 
-    # task 1
+    # sub task1
     def process_chunk(self, chunk_idx, block):
         # 处理一个块
         for entry in block:
@@ -76,7 +76,7 @@ class OnlineMatch:
             value = (chunk_idx, (entry[4], entry[5]))  # chunk_idx及后两个值(chunk_idx, (from_idx, to_idx))作为值
             self.RAW_MATCH_STATE[key].append(value)  # SortedList会自动根据(chunk_idx, from_idx)排序  
 
-    # Tasks for video_fp-list to video_fp-sorted_list
+    # Tasks 2: video_fp:match_idx_list -> video_fp:sorted_match_idx_list
     def find_continuous_intervals(self):
         start_time = time.time()  
 
@@ -96,7 +96,7 @@ class OnlineMatch:
         end_time = time.time()  
         print(f"find_continuous_intervals took {end_time - start_time:.4f} seconds")
 
-    # task2
+    # sub task2
     def merge_intervals_for_key(self, fp_key, cidx_intervals):
         # 处理一个fp_key:cidx_intervals
         cidx_intervals.sort(key=lambda x: (x[0], x[1][0])) # 按照chunk_idx, from_idx排序
