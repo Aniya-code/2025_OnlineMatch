@@ -97,6 +97,9 @@ def csv_to_kv(file_path, window_max, C):
             url = row[1]
             v_itag = row[2]
             a_itag = row[5]
+            video_quality = row[3]
+            if video_quality != "1280x720": # 只保留720
+                continue
             fingerprint = row[8].split('/')[:100] #### ！！防止爆内存！！ #####
             fingerprint = [int(x) for x in fingerprint if x.isdigit()]
             if len(fingerprint) == 0:
